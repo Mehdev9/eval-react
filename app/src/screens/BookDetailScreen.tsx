@@ -29,11 +29,12 @@ const BookDetailScreen = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Nom: {book.name}</Text>
-      <Text>Auteur: {book.author}</Text>
-      <Text>Éditeur: {book.editor}</Text>
-      <Text>Année de publication: {book.year}</Text>
-      <Text>Statut: {book.lu ? 'Lu' : 'Non lu'}</Text>
+      <Text>Nom : {book.name}</Text>
+      <Text>Auteur : {book.author}</Text>
+      <Text>Éditeur : {book.editor}</Text>
+      <Text>Année de publication : {book.year}</Text>
+      <Text>Statut : {book.lu ? 'Lu' : 'Non lu'}</Text>
+      <Text>Note des lecteurs : {book.rating}</Text>
       <Button
         title="Modifier"
         onPress={() =>
