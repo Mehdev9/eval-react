@@ -4,13 +4,17 @@
 
 // oragnisation de l'arborescence (creation packages src,models,services etc)
 
-// creation du model livre
-
 // clone de l'api api-books
 
 // creation des vues et du service
 
 // Crud 
+
+// ajout du champs favoris avec l'icone
+
+// ajout de la note dans details
+
+
 
 
 

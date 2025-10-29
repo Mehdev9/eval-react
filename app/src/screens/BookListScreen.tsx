@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, Alert, ScrollView } from 'react-native';
+import { View, Text, Button, FlatList, Alert, ScrollView, StyleSheet } from 'react-native';
 import { getBooks, deleteBook, updateBookStatus, updateBookFavorite } from '../services/BookService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -73,14 +73,14 @@ const BookListScreen = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => {
             return (
-              <View style={{ marginBottom: 10, padding: 10, borderBottomWidth: 1 }}>
+              <View style={{ marginBottom: 20, padding: 15, borderBottomWidth: 1, alignItems: 'center' }}>
                 <Text>{`Nom: ${item.name}`}</Text>
                 <Text>{`Auteur: ${item.author}`}</Text>
                 <Text>{`Éditeur: ${item.editor}`}</Text>
                 <Text>{`Année de publication: ${item.year}`}</Text>
                 <Text>{`Lu: ${item.read ? 'Oui' : 'Non'}`}</Text>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                   <Text style={{ marginRight: 10 }}>Favoris:</Text>
                   <Ionicons
                     name={item.favorite ? "heart" : "heart-outline"}
@@ -90,20 +90,26 @@ const BookListScreen = () => {
                   />
                 </View>
 
-                <Button
-                  title="Détails"
-                  onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)}
-                />
-
-                <Button
-                  title={item.read ? "Marquer comme non lu" : "Marquer comme lu"}
-                  onPress={() => handleToggleStatus(item)}
-                />
-
-                <Button
-                  title="Supprimer"
-                  onPress={() => handleDelete(item.id)}
-                />
+                <View style={styles.buttonContainer}>
+                  <View style={styles.buttonWrapper}>
+                    <Button
+                      title="Détails"
+                      onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)}
+                    />
+                  </View>
+                  <View style={styles.buttonWrapper}>
+                    <Button
+                      title={item.read ? "Marquer comme non lu" : "Marquer comme lu"}
+                      onPress={() => handleToggleStatus(item)}
+                    />
+                  </View>
+                  <View style={styles.buttonWrapper}>
+                    <Button
+                      title="Supprimer"
+                      onPress={() => handleDelete(item.id)}
+                    />
+                  </View>
+                </View>
               </View>
             );
           }}
@@ -117,5 +123,20 @@ const BookListScreen = () => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    width: '40%',
+  },
+  buttonWrapper: {
+    flex: 1,
+    marginHorizontal: 5, 
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+});
 
 export default BookListScreen;
