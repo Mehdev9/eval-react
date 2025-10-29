@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button } from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router'; // Importation des hooks
 import { addBook, updateBook, getBookById } from '../services/BookService';
 
-const AddEditBookScreen = ({ route, navigation }: any) => {
-  const { bookId, setBooks } = route.params || {}; // On récupère setBooks du paramètre
+const AddEditBookScreen = () => {
+  const router = useRouter();
+  const params = useLocalSearchParams(); // Récupération du paramètre `bookId` de l'URL
+  const bookId = Array.isArray(params.bookId) ? params.bookId[0] : params.bookId;
   const [book, setBook] = useState<any>({
     name: '',
     author: '',
@@ -25,15 +28,13 @@ const AddEditBookScreen = ({ route, navigation }: any) => {
   const handleSave = async () => {
     let newBook;
     if (bookId) {
-      newBook = await updateBook(bookId, book);
+      newBook = await updateBook(bookId, book); // Met à jour le livre
     } else {
-      newBook = await addBook(book);
+      newBook = await addBook(book); // Ajoute un nouveau livre
     }
-    
-    // On met à jour la liste des livres en ajoutant le livre créé ou modifié
-    setBooks((prevBooks: any[]) => [...prevBooks, newBook]);
-    
-    navigation.goBack();
+
+    // Redirige vers la liste des livres après enregistrement
+    router.push('/');
   };
 
   return (

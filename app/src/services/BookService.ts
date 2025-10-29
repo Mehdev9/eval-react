@@ -4,13 +4,10 @@ const API_URL = 'http://10.105.1.210:3000'; // Remplace par l'IP de ton PC
 export const getBooks = async () => {
   try {
     const response = await fetch(`${API_URL}/books`);
-    console.log('Response:', response); // Vérifie la réponse brute
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération des livres');
     }
-    const data = await response.json();
-    console.log('Data:', data); // Vérifie les données renvoyées
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Erreur:', error);
     throw error;
@@ -21,13 +18,10 @@ export const getBooks = async () => {
 export const getBookById = async (id: string) => {
   try {
     const response = await fetch(`${API_URL}/books/${id}`);
-    console.log('Response:', response); // Vérifie la réponse brute
     if (!response.ok) {
       throw new Error('Erreur lors de la récupération du livre');
     }
-    const data = await response.json();
-    console.log('Data:', data); // Vérifie les données renvoyées
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Erreur:', error);
     throw error;
@@ -39,20 +33,13 @@ export const addBook = async (book: any) => {
   try {
     const response = await fetch(`${API_URL}/books`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(book),
     });
-
-    console.log('Response:', response); // Vérifie la réponse brute
     if (!response.ok) {
       throw new Error('Erreur lors de l\'ajout du livre');
     }
-
-    const data = await response.json();
-    console.log('Data:', data); // Vérifie les données renvoyées
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Erreur:', error);
     throw error;
@@ -64,20 +51,13 @@ export const updateBook = async (id: string, book: any) => {
   try {
     const response = await fetch(`${API_URL}/books/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(book),
     });
-
-    console.log('Response:', response); // Vérifie la réponse brute
     if (!response.ok) {
       throw new Error('Erreur lors de la mise à jour du livre');
     }
-
-    const data = await response.json();
-    console.log('Data:', data); // Vérifie les données renvoyées
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Erreur:', error);
     throw error;
@@ -90,8 +70,6 @@ export const deleteBook = async (id: string) => {
     const response = await fetch(`${API_URL}/books/${id}`, {
       method: 'DELETE',
     });
-
-    console.log('Response:', response); // Vérifie la réponse brute
     if (!response.ok) {
       throw new Error('Erreur lors de la suppression du livre');
     }
@@ -106,20 +84,13 @@ export const updateBookStatus = async (id: string, book: any) => {
   try {
     const response = await fetch(`${API_URL}/books/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(book),
     });
-
-    console.log('Response:', response); // Vérifie la réponse brute
     if (!response.ok) {
       throw new Error('Erreur lors de la mise à jour du statut');
     }
-
-    const data = await response.json();
-    console.log('Data:', data); // Vérifie les données renvoyées
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Erreur:', error);
     throw error;

@@ -1,33 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, Alert, ScrollView } from 'react-native';
 import { getBooks, deleteBook, updateBookStatus } from '../services/BookService';
+import { useRouter } from 'expo-router'; // Importation de useRouter pour la navigation
 
-const BookListScreen = ({ navigation }: any) => {
+const BookListScreen = () => {
   const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter(); // Hook de navigation
+
+  const loadBooks = async () => {
+    try {
+      const booksData = await getBooks();
+      setBooks(booksData);
+    } catch (err) {
+      console.error(err);
+      setError('Erreur lors de la récupération des livres');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadBooks = async () => {
-      try {
-        const booksData = await getBooks();
-        setBooks(booksData);
-      } catch (err) {
-        setError('Erreur lors de la récupération des livres');
-      } finally {
-        setLoading(false);
-      }
-    };
     loadBooks();
   }, []);
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteBook(id); // Supprime le livre de l'API
-      setBooks(books.filter((book) => book.id !== id)); // Supprime le livre de l'état local
+      await deleteBook(id);
+      setBooks(books.filter((book) => book.id !== id));
 
       Alert.alert('Succès', 'Le livre a été supprimé avec succès');
-    } catch (error) {
+    } catch {
       setError('Erreur lors de la suppression du livre');
       Alert.alert('Erreur', 'Échec de la suppression du livre');
     }
@@ -65,16 +69,31 @@ const BookListScreen = ({ navigation }: any) => {
                 <Text>{`Éditeur: ${item.editor}`}</Text>
                 <Text>{`Année de publication: ${item.year}`}</Text>
                 <Text>{`Lu: ${item.read ? 'Oui' : 'Non'}`}</Text>
-                <Button title="Détails" onPress={() => navigation.navigate('BookDetail', { bookId: item.id })} />
-                <Button title={item.read ? "Marquer comme non lu" : "Marquer comme lu"} onPress={() => handleToggleStatus(item)} />
-                <Button title="Supprimer" onPress={() => handleDelete(item.id)} />
+                
+                {/* Remplace Link par Button */}
+                <Button
+                  title="Détails"
+                  onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)} // Naviguer vers BookDetailScreen avec l'ID
+                />
+                
+                <Button
+                  title={item.read ? "Marquer comme non lu" : "Marquer comme lu"}
+                  onPress={() => handleToggleStatus(item)}
+                />
+                
+                <Button
+                  title="Supprimer"
+                  onPress={() => handleDelete(item.id)}
+                />
               </View>
             );
           }}
         />
+        
+        {/* Ajouter un livre avec Button */}
         <Button
           title="Ajouter un livre"
-          onPress={() => navigation.navigate('AddEditBook', { setBooks })} // Passer setBooks comme prop
+          onPress={() => router.push("/src/screens/AddEditBookScreen")} // Naviguer vers AddEditBookScreen
         />
       </View>
     </ScrollView>
