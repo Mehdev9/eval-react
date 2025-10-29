@@ -1,3 +1,39 @@
+// creation du projet eval-react avec npx create-expo-app@latest
+
+// creation du repo git eval-react
+
+// oragnisation de l'arborescence (creation packages src,models,services etc)
+
+// creation du model livre
+
+// clone de l'api api-books
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
