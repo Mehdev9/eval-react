@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router'; // Importation des hooks d'Expo Router
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { getBookById } from '../services/BookService';
 
 const BookDetailScreen = () => {
-  const params = useLocalSearchParams(); // Récupérer l'ID du livre depuis l'URL
+  const params = useLocalSearchParams();
   const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : '';
   const [book, setBook] = useState<any>(null);
-  const router = useRouter(); // Hook pour naviguer
+  const router = useRouter();
 
-  // Charger les détails du livre
   useEffect(() => {
     const loadBookDetails = async () => {
       const bookData = await getBookById(id);
@@ -20,9 +19,8 @@ const BookDetailScreen = () => {
     }
   }, [id]);
 
-  // Fonction qui permet de mettre à jour le livre après la modification
   const handleBookUpdate = (updatedBook: any) => {
-    setBook(updatedBook);  // Mise à jour de l'état local
+    setBook(updatedBook);
   };
 
   if (!book) {
@@ -39,7 +37,7 @@ const BookDetailScreen = () => {
       <Button
         title="Modifier"
         onPress={() =>
-          router.push('/src/screens/AddEditBookScreen')  // Utilisation de router.push pour la navigation avec paramètres
+          router.push('/src/screens/AddEditBookScreen')
         }
       />
     </View>

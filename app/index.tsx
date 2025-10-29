@@ -5,9 +5,8 @@ import { useRouter } from 'expo-router';
 const Index = () => {
   const router = useRouter();
 
-  // Exemple d'utilisation du router si tu veux naviguer manuellement
   const navigateToBookList = () => {
-    router.push('/src/screens/BookListScreen'); // Redirige vers la liste des livres
+    router.push('/src/screens/BookListScreen');
   };
 
   return (

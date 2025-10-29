@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router'; // Importation des hooks
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { addBook, updateBook, getBookById } from '../services/BookService';
 
 const AddEditBookScreen = () => {
   const router = useRouter();
-  const params = useLocalSearchParams(); // Récupération du paramètre `bookId` de l'URL
+  const params = useLocalSearchParams();
   const bookId = Array.isArray(params.bookId) ? params.bookId[0] : params.bookId;
   const [book, setBook] = useState<any>({
     name: '',
@@ -28,13 +28,13 @@ const AddEditBookScreen = () => {
   const handleSave = async () => {
     let newBook;
     if (bookId) {
-      newBook = await updateBook(bookId, book); // Met à jour le livre
+      newBook = await updateBook(bookId, book);
     } else {
-      newBook = await addBook(book); // Ajoute un nouveau livre
+      newBook = await addBook(book);
     }
 
-    // Redirige vers la liste des livres après enregistrement
-    router.push('/');
+    
+    router.push('/src/screens/BookListScreen');
   };
 
   return (

@@ -1,6 +1,5 @@
-const API_URL = 'http://10.105.1.210:3000'; // Remplace par l'IP de ton PC
+const API_URL = 'http://10.105.1.210:3000';
 
-// Récupérer tous les livres
 export const getBooks = async () => {
   try {
     const response = await fetch(`${API_URL}/books`);
@@ -14,7 +13,6 @@ export const getBooks = async () => {
   }
 };
 
-// Récupérer un livre par ID
 export const getBookById = async (id: string) => {
   try {
     const response = await fetch(`${API_URL}/books/${id}`);
@@ -28,7 +26,6 @@ export const getBookById = async (id: string) => {
   }
 };
 
-// Ajouter un livre
 export const addBook = async (book: any) => {
   try {
     const response = await fetch(`${API_URL}/books`, {
@@ -46,7 +43,6 @@ export const addBook = async (book: any) => {
   }
 };
 
-// Modifier un livre par ID
 export const updateBook = async (id: string, book: any) => {
   try {
     const response = await fetch(`${API_URL}/books/${id}`, {
@@ -64,7 +60,6 @@ export const updateBook = async (id: string, book: any) => {
   }
 };
 
-// Supprimer un livre par ID
 export const deleteBook = async (id: string) => {
   try {
     const response = await fetch(`${API_URL}/books/${id}`, {
@@ -79,7 +74,6 @@ export const deleteBook = async (id: string) => {
   }
 };
 
-// Changer le statut "lu" ou "non lu"
 export const updateBookStatus = async (id: string, book: any) => {
   try {
     const response = await fetch(`${API_URL}/books/${id}`, {
@@ -89,6 +83,23 @@ export const updateBookStatus = async (id: string, book: any) => {
     });
     if (!response.ok) {
       throw new Error('Erreur lors de la mise à jour du statut');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Erreur:', error);
+    throw error;
+  }
+};
+
+export const updateBookFavorite = async (id: string, favorite: boolean) => {
+  try {
+    const response = await fetch(`${API_URL}/books/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ favorite }),
+    });
+    if (!response.ok) {
+      throw new Error('Erreur lors de la mise à jour du favori');
     }
     return await response.json();
   } catch (error) {

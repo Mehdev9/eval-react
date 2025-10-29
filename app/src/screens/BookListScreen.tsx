@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, Alert, ScrollView } from 'react-native';
-import { getBooks, deleteBook, updateBookStatus } from '../services/BookService';
-import { useRouter } from 'expo-router'; // Importation de useRouter pour la navigation
+import { getBooks, deleteBook, updateBookStatus, updateBookFavorite } from '../services/BookService';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 const BookListScreen = () => {
   const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter(); // Hook de navigation
+  const router = useRouter();
 
   const loadBooks = async () => {
     try {
@@ -46,6 +47,15 @@ const BookListScreen = () => {
     }
   };
 
+  const toggleFavorite = async (book: any) => {
+    try {
+      const updatedBook = await updateBookFavorite(book.id, !book.favorite);
+      setBooks(books.map(b => (b.id === book.id ? updatedBook : b)));
+    } catch (error) {
+      console.error('Erreur:', error);
+    }
+  };
+
   if (loading) {
     return <Text>Chargement...</Text>;
   }
@@ -69,18 +79,27 @@ const BookListScreen = () => {
                 <Text>{`Éditeur: ${item.editor}`}</Text>
                 <Text>{`Année de publication: ${item.year}`}</Text>
                 <Text>{`Lu: ${item.read ? 'Oui' : 'Non'}`}</Text>
-                
-                {/* Remplace Link par Button */}
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                  <Text style={{ marginRight: 10 }}>Favoris:</Text>
+                  <Ionicons
+                    name={item.favorite ? "heart" : "heart-outline"}
+                    size={24}
+                    color="red"
+                    onPress={() => toggleFavorite(item)}
+                  />
+                </View>
+
                 <Button
                   title="Détails"
-                  onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)} // Naviguer vers BookDetailScreen avec l'ID
+                  onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)}
                 />
-                
+
                 <Button
                   title={item.read ? "Marquer comme non lu" : "Marquer comme lu"}
                   onPress={() => handleToggleStatus(item)}
                 />
-                
+
                 <Button
                   title="Supprimer"
                   onPress={() => handleDelete(item.id)}
@@ -89,11 +108,10 @@ const BookListScreen = () => {
             );
           }}
         />
-        
-        {/* Ajouter un livre avec Button */}
+
         <Button
           title="Ajouter un livre"
-          onPress={() => router.push("/src/screens/AddEditBookScreen")} // Naviguer vers AddEditBookScreen
+          onPress={() => router.push("/src/screens/AddEditBookScreen")}
         />
       </View>
     </ScrollView>
