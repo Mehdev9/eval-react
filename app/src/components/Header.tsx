@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    color: '#D4AF37',
+    color: '#FFD700',
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     width: '60%',
   },
   navLink: {
-    color: '#D4AF37',
+    color: '#FFD700',
     fontSize: 16,
     marginHorizontal: 10,
     textDecorationLine: 'underline',

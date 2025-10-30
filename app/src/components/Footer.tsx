@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#ddd',
   },
   footerText: {
-    color: '#D4AF37',
+    color: '#FFD700',
     fontSize: 14,
   },
 });
