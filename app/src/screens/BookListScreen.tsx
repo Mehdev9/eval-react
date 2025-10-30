@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, Alert, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Alert, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { getBooks, deleteBook, updateBookStatus, updateBookFavorite } from '../services/BookService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -74,52 +74,39 @@ const BookListScreen = () => {
         >
           <Text style={styles.addButtonText}>Ajouter un livre</Text>
         </TouchableOpacity>
-        <FlatList
-          data={books}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.card}>
-                <Text style={styles.cardTitle}>{item.name}</Text>
-                <Text style={styles.cardAuthor}>Auteur: {item.author}</Text>
-                <Text style={styles.cardDetails}>Éditeur: {item.editor}</Text>
-                <Text style={styles.cardDetails}>Année de publication: {item.year}</Text>
-                <Text style={styles.cardDetails}>Lu: {item.read ? 'Oui' : 'Non'}</Text>
+        {books.map((item) => (
+          <View style={styles.card} key={item.id}>
+            <Text style={styles.cardTitle}>{item.name}</Text>
+            <Text style={styles.cardAuthor}>Auteur: {item.author}</Text>
+            <Text style={styles.cardDetails}>Éditeur: {item.editor}</Text>
+            <Text style={styles.cardDetails}>Année de publication: {item.year}</Text>
+            <Text style={styles.cardDetails}>Lu: {item.read ? 'Oui' : 'Non'}</Text>
 
-                <View style={styles.favoriteContainer}>
-                  <Text style={styles.favoriteText}>Favoris:</Text>
-                  <Ionicons
-                    name={item.favorite ? "heart" : "heart-outline"}
-                    size={24}
-                    color="red"
-                    onPress={() => toggleFavorite(item)}
-                  />
-                </View>
+            <View style={styles.favoriteContainer}>
+              <Text style={styles.favoriteText}>Favoris:</Text>
+              <Ionicons
+                name={item.favorite ? "heart" : "heart-outline"}
+                size={24}
+                color="red"
+                onPress={() => toggleFavorite(item)}
+              />
+            </View>
 
-                <View style={styles.buttonContainer}>
-                  <View style={styles.buttonWrapper}>
-                    <Button
-                      title="Détails"
-                      onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)}
-                    />
-                  </View>
-                  <View style={styles.buttonWrapper}>
-                    <Button
-                      title={item.read ? "Marquer comme non lu" : "Marquer comme lu"}
-                      onPress={() => handleToggleStatus(item)}
-                    />
-                  </View>
-                  <View style={styles.buttonWrapper}>
-                    <Button
-                      title="Supprimer"
-                      onPress={() => handleDelete(item.id)}
-                    />
-                  </View>
-                </View>
-              </View>
-            );
-          }}
-        />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.cardButton} onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)}>
+                <Text style={styles.cardButtonText}>Détails</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.cardButton} onPress={() => handleToggleStatus(item)}>
+                <Text style={styles.cardButtonText}>
+                  {item.read ? "Marquer comme non lu" : "Marquer comme lu"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.cardButton, styles.deleteButton]} onPress={() => handleDelete(item.id)}>
+                <Text style={styles.cardButtonDeleteText}>Supprimer</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
       </View>
     </ScrollView>
   );
@@ -175,19 +162,35 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     marginTop: 15,
+    gap: 10,
   },
-  buttonWrapper: {
-    flex: 1,
-    marginHorizontal: 5,
+  cardButton: {
+    backgroundColor: '#003366',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 10,
-    overflow: 'hidden',
+    marginHorizontal: 5,
+    alignItems: 'center',
+  },
+  cardButtonText: {
+    color: '#D4AF37',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  deleteButton: {
+    backgroundColor: '#E53935',
+  },
+  cardButtonDeleteText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   addButton: {
     marginTop: 30,
     marginBottom: 20,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#30d438ff',
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',

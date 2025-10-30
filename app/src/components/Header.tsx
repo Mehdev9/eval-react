@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#003366',
     padding: 15,
     height: 80,
     justifyContent: 'center',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    color: '#fff',
+    color: '#D4AF37',
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     width: '60%',
   },
   navLink: {
-    color: '#fff',
+    color: '#D4AF37',
     fontSize: 16,
     marginHorizontal: 10,
     textDecorationLine: 'underline',

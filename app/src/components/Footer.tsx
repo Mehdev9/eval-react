@@ -13,12 +13,12 @@ const styles = StyleSheet.create({
   footerContainer: {
     alignItems: 'center',
     paddingVertical: 10,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#003366',
     borderTopWidth: 1,
     borderTopColor: '#ddd',
   },
   footerText: {
-    color: '#fff',
+    color: '#D4AF37',
     fontSize: 14,
   },
 });
