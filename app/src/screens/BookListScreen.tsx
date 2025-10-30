@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, Alert, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Button, FlatList, Alert, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { getBooks, deleteBook, updateBookStatus, updateBookFavorite } from '../services/BookService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -66,22 +66,22 @@ const BookListScreen = () => {
 
   return (
     <ScrollView style={{ flex: 1 }}>
-      <View style={{ flex: 1, padding: 10 }}>
-        <Text>Liste des Livres</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>Liste des Livres</Text>
         <FlatList
           data={books}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => {
             return (
-              <View style={{ marginBottom: 20, padding: 15, borderBottomWidth: 1, alignItems: 'center' }}>
-                <Text>{`Nom: ${item.name}`}</Text>
-                <Text>{`Auteur: ${item.author}`}</Text>
-                <Text>{`Éditeur: ${item.editor}`}</Text>
-                <Text>{`Année de publication: ${item.year}`}</Text>
-                <Text>{`Lu: ${item.read ? 'Oui' : 'Non'}`}</Text>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>{item.name}</Text>
+                <Text style={styles.cardAuthor}>Auteur: {item.author}</Text>
+                <Text style={styles.cardDetails}>Éditeur: {item.editor}</Text>
+                <Text style={styles.cardDetails}>Année de publication: {item.year}</Text>
+                <Text style={styles.cardDetails}>Lu: {item.read ? 'Oui' : 'Non'}</Text>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                  <Text style={{ marginRight: 10 }}>Favoris:</Text>
+                <View style={styles.favoriteContainer}>
+                  <Text style={styles.favoriteText}>Favoris:</Text>
                   <Ionicons
                     name={item.favorite ? "heart" : "heart-outline"}
                     size={24}
@@ -115,27 +115,87 @@ const BookListScreen = () => {
           }}
         />
 
-        <Button
-          title="Ajouter un livre"
+        <TouchableOpacity
+          style={styles.addButton}
           onPress={() => router.push("/src/screens/AddEditBookScreen")}
-        />
+        >
+          <Text style={styles.addButtonText}>Ajouter un livre</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f7f7f7',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
+  },
+  cardTitle: {
+    fontSize: 22,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  cardAuthor: {
+    fontSize: 16,
+    marginBottom: 4,
+    color: '#555',
+  },
+  cardDetails: {
+    fontSize: 14,
+    marginBottom: 4,
+    color: '#777',
+  },
+  favoriteContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  favoriteText: {
+    marginRight: 10,
+    fontSize: 16,
+    fontWeight: '600',
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
-    width: '40%',
+    marginTop: 15,
   },
   buttonWrapper: {
     flex: 1,
-    marginHorizontal: 5, 
+    marginHorizontal: 5,
     borderRadius: 10,
     overflow: 'hidden',
+  },
+  addButton: {
+    marginTop: 30,
+    backgroundColor: '#4CAF50',
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

@@ -10,7 +10,6 @@ export default function RootLayout() {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Stack />
         <View style={styles.buttonContainer}>
-         
         </View>
       </ScrollView>
       <Footer />
@@ -22,6 +21,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    fontFamily: 'Georgia',
   },
   scrollContainer: {
     flexGrow: 1,

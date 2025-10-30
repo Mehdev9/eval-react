@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   footerContainer: {
     alignItems: 'center',
     paddingVertical: 10,
-    backgroundColor: '#333',
+    backgroundColor: '#4CAF50',
     borderTopWidth: 1,
     borderTopColor: '#ddd',
   },

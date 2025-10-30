@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#4CAF50', // Couleur de fond du header
+    backgroundColor: '#4CAF50',
     padding: 15,
     height: 80,
     justifyContent: 'center',
