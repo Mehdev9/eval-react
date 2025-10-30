@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { addBook, updateBook, getBookById } from '../services/BookService';
 
@@ -33,40 +33,93 @@ const AddEditBookScreen = () => {
       newBook = await addBook(book);
     }
 
-    
     router.push('/src/screens/BookListScreen');
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <TextInput
-        value={book.name}
-        placeholder="Nom du livre"
-        onChangeText={(text) => setBook({ ...book, name: text })}
-        style={{ borderWidth: 1, width: '80%', marginBottom: 10 }}
-      />
-      <TextInput
-        value={book.author}
-        placeholder="Auteur"
-        onChangeText={(text) => setBook({ ...book, author: text })}
-        style={{ borderWidth: 1, width: '80%', marginBottom: 10 }}
-      />
-      <TextInput
-        value={book.editor}
-        placeholder="Éditeur"
-        onChangeText={(text) => setBook({ ...book, editor: text })}
-        style={{ borderWidth: 1, width: '80%', marginBottom: 10 }}
-      />
-      <TextInput
-        value={book.year}
-        placeholder="Année de publication"
-        keyboardType="numeric"
-        onChangeText={(text) => setBook({ ...book, year: text })}
-        style={{ borderWidth: 1, width: '80%', marginBottom: 10 }}
-      />
-      <Button title="Enregistrer" onPress={handleSave} />
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.formCard}>
+        <Text style={styles.formTitle}>{bookId ? 'Modifier le livre' : 'Ajouter un livre'}</Text>
+
+        <TextInput
+          value={book.name}
+          placeholder="Nom du livre"
+          onChangeText={(text) => setBook({ ...book, name: text })}
+          style={styles.input}
+        />
+        <TextInput
+          value={book.author}
+          placeholder="Auteur"
+          onChangeText={(text) => setBook({ ...book, author: text })}
+          style={styles.input}
+        />
+        <TextInput
+          value={book.editor}
+          placeholder="Éditeur"
+          onChangeText={(text) => setBook({ ...book, editor: text })}
+          style={styles.input}
+        />
+        <TextInput
+          value={book.year}
+          placeholder="Année de publication"
+          keyboardType="numeric"
+          onChangeText={(text) => setBook({ ...book, year: text })}
+          style={styles.input}
+        />
+
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>{bookId ? 'Mettre à jour' : 'Enregistrer'}</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f7f7f7',
+  },
+  formCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
+    marginBottom: 20,
+  },
+  formTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginBottom: 15,
+    fontSize: 16,
+    width: '100%',
+  },
+  saveButton: {
+    backgroundColor: '#30d438ff',
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 
 export default AddEditBookScreen;
