@@ -68,6 +68,12 @@ const BookListScreen = () => {
     <ScrollView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Text style={styles.title}>Liste des Livres</Text>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => router.push("/src/screens/AddEditBookScreen")}
+        >
+          <Text style={styles.addButtonText}>Ajouter un livre</Text>
+        </TouchableOpacity>
         <FlatList
           data={books}
           keyExtractor={(item) => item.id.toString()}
@@ -114,13 +120,6 @@ const BookListScreen = () => {
             );
           }}
         />
-
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => router.push("/src/screens/AddEditBookScreen")}
-        >
-          <Text style={styles.addButtonText}>Ajouter un livre</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -187,10 +186,13 @@ const styles = StyleSheet.create({
   },
   addButton: {
     marginTop: 30,
+    marginBottom: 20,
     backgroundColor: '#4CAF50',
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
+    width: '30%',
+    alignSelf: 'flex-end',
   },
   addButtonText: {
     color: '#fff',

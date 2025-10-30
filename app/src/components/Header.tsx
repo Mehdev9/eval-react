@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     padding: 15,
     height: 80,
     justifyContent: 'center',
+    fontFamily: 'Georgia',
   },
   headerTitle: {
     fontSize: 20,
