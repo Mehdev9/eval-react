@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -228,8 +229,12 @@ const BookListScreen = () => {
                 onRatingChange={(newRating) =>
                   handleRatingChange(item.id, newRating)
                 }
-              />
+                />
             </View>
+
+                {item.cover && (
+                  <Image source={{ uri: item.cover }} style={styles.cardImage} />
+                )}
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -364,6 +369,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+   cardImage: {
+  width: 100,
+  height: 150,
+  borderRadius: 10,
+  marginBottom: 10,
+  resizeMode: 'contain',
+},
   deleteButton: {
     backgroundColor: "#E53935",
   },

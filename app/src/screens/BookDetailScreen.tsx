@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { getBookById } from '../services/BookService';
 
@@ -19,10 +19,6 @@ const BookDetailScreen = () => {
     }
   }, [id]);
 
-  const handleBookUpdate = (updatedBook: any) => {
-    setBook(updatedBook);
-  };
-
   if (!book) {
     return <Text style={styles.loadingText}>Chargement...</Text>;
   }
@@ -30,6 +26,9 @@ const BookDetailScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.card}>
+        {book.cover && (
+          <Image source={{ uri: book.cover }} style={styles.bookImage} />
+        )}
         <Text style={styles.cardTitle}>Nom : {book.name}</Text>
         <Text style={styles.cardDetail}>Auteur : {book.author}</Text>
         <Text style={styles.cardDetail}>Éditeur : {book.editor}</Text>
@@ -39,9 +38,9 @@ const BookDetailScreen = () => {
       </View>
 
       <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => router.push('/src/screens/AddEditBookScreen')}
-      >
+  style={styles.editButton}
+  onPress={() => router.push(`/src/screens/AddEditBookScreen?bookId=${id}`)}
+>
         <Text style={styles.editButtonText}>Modifier</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -62,16 +61,28 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 15,
     padding: 20,
     marginBottom: 20,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
+    width: '60%',
+    alignItems: 'center',
+  },
+  bookImage: {
+    width: 150,
+    height: 225,
+    borderRadius: 10,
+    padding: 20,
     elevation: 3,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
-    width: '50%',
-    alignItems: 'center',
+    marginBottom: 15,
   },
   cardTitle: {
     fontSize: 24,
@@ -89,7 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 20,
-    width: '50%',
+    width: '30%',
     alignSelf: 'center',
   },
   editButtonText: {

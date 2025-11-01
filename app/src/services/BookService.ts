@@ -8,7 +8,6 @@ export const getBooks = async () => {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erreur:', error);
     throw error;
   }
 };
@@ -21,7 +20,6 @@ export const getBookById = async (id: string) => {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erreur:', error);
     throw error;
   }
 };
@@ -38,7 +36,6 @@ export const addBook = async (book: any) => {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erreur:', error);
     throw error;
   }
 };
@@ -55,7 +52,6 @@ export const updateBook = async (id: string, book: any) => {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erreur:', error);
     throw error;
   }
 };
@@ -69,7 +65,6 @@ export const deleteBook = async (id: string) => {
       throw new Error('Erreur lors de la suppression du livre');
     }
   } catch (error) {
-    console.error('Erreur:', error);
     throw error;
   }
 };
@@ -86,7 +81,6 @@ export const updateBookStatus = async (id: string, book: any) => {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erreur:', error);
     throw error;
   }
 };
@@ -103,7 +97,6 @@ export const updateBookFavorite = async (id: string, favorite: boolean) => {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erreur:', error);
     throw error;
   }
 };
@@ -120,7 +113,6 @@ export const updateBookRating = async (id: string, rating: number) => {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erreur:', error);
     throw error;
   }
 };
