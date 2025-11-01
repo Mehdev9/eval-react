@@ -2,52 +2,34 @@
 
 // creation du repo git eval-react
 
-// oragnisation de l'arborescence (creation packages src,models,services etc)
+// Arborescence du projet : J'ai organisé l'arborescence du projet en créant un dossier src à la racine de l'application, puis j'y ai ajouté les sous-dossiers screens, services, etc., pour mieux structurer les différentes parties de l'application.
 
-// clone de l'api api-books
+// clone sur le repo de l'api api-books
 
-// creation des vues et du service
+// creation des vues et du service dans les bons packages
 
-// Crud 
+// Crud : 
 
-// ajout du champs favoris avec l'icone
+Affichage de la liste des livres : Utilise useState pour stocker la liste des livres et useEffect pour charger les livres depuis ton API lors du chargement du composant.
 
-// ajout de la note dans details
+Ajouter un livre : Utilise useState pour gérer le formulaire d'ajout, puis appelle addBook pour envoyer les données à l'API et mettre à jour la liste des livres après l'ajout.
 
-// ajout du systeme de notation
+Mettre à jour un livre : Quand un utilisateur modifie un livre, tu utilises un formulaire avec useState pour gérer les champs. Ensuite, appelle updateBook avec l'ID et les nouvelles données.
 
-// ajout des filtres, tri et recherche
-
-// ajout de l'image
+Supprimer un livre : Sur un bouton de suppression, appelle deleteBook avec l'ID du livre à supprimer, et mets à jour la liste en conséquence.
 
 
+// Favoris : J'ai utilisé useState pour gérer un état favorite qui permet de marquer un livre comme favori avec une icône. Quand l'utilisateur clique dessus, l'état change et l'API est mise à jour.
+
+// Notation : J'ai créé un état rating avec useState pour gérer la note. L'utilisateur sélectionne une note, ce qui met à jour l'état et envoie la nouvelle valeur à l'API.
+
+// Filtres, Tri et Recherche : J'ai utilisé un état pour gérer les filtres (comme l'auteur, l'année, etc.). À chaque fois qu'un filtre est appliqué, un useEffect est déclenché pour mettre à jour l'affichage des livres.
+
+// Image de couverture : L'image est gérée avec un état cover dans useState. Quand l'utilisateur choisit une nouvelle image via un bouton, l'URL de l'image est mise à jour et affichée.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Résumé :
+Je me suis arrêté au palier 18-19/20 car je n'ai pas avancé aussi rapidement que je l'aurais voulu. Les paliers précédents sont complets et toutes les fonctionnalités demandées sont fonctionnelles (CRUD, favoris, notation, images, etc.). J'ai créé un composant pour le header et le footer, que j'ai appliqué au layout pour les avoir partout dans l'application, et j'ai également travaillé sur l'UI pour rendre l'application plus esthétique.
 
 # Welcome to your Expo app 👋
 
