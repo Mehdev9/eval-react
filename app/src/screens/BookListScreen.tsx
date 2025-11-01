@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  TextInput,
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,7 +26,7 @@ const StarRating = ({
   onRatingChange: (newRating: number) => void;
 }) => {
   const handlePress = (newRating: number) => {
-    onRatingChange(newRating); // Appelle la fonction de mise à jour de la note
+    onRatingChange(newRating);
   };
 
   return (
@@ -45,14 +46,19 @@ const StarRating = ({
 
 const BookListScreen = () => {
   const [books, setBooks] = useState<any[]>([]);
+  const [filteredBooks, setFilteredBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filter, setFilter] = useState<string>("all");
+  const [sortCriteria, setSortCriteria] = useState<string>("title");
   const router = useRouter();
 
   const loadBooks = async () => {
     try {
       const booksData = await getBooks();
       setBooks(booksData);
+      setFilteredBooks(booksData);
     } catch (err) {
       console.error(err);
       setError("Erreur lors de la récupération des livres");
@@ -64,6 +70,31 @@ const BookListScreen = () => {
   useEffect(() => {
     loadBooks();
   }, []);
+
+  useEffect(() => {
+    let filtered = books.filter((book) =>
+      book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      book.author.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    if (filter === "read") {
+      filtered = filtered.filter((book) => book.read);
+    } else if (filter === "unread") {
+      filtered = filtered.filter((book) => !book.read);
+    } else if (filter === "favorites") {
+      filtered = filtered.filter((book) => book.favorite);
+    }
+
+    if (sortCriteria === "title") {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortCriteria === "author") {
+      filtered.sort((a, b) => a.author.localeCompare(b.author));
+    } else if (sortCriteria === "theme") {
+      filtered.sort((a, b) => a.editor.localeCompare(b.editor)); // Assuming "theme" is represented by the 'editor' field
+    }
+
+    setFilteredBooks(filtered);
+  }, [searchQuery, filter, sortCriteria, books]);
 
   const handleDelete = async (id: string) => {
     try {
@@ -123,6 +154,41 @@ const BookListScreen = () => {
       <View style={styles.container}>
         <Text style={styles.title}>Liste des Livres</Text>
 
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Recherche par titre ou auteur"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+
+        <View style={styles.filters}>
+          <TouchableOpacity onPress={() => setFilter("all")}>
+            <Text style={styles.filterText}>Tous</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setFilter("read")}>
+            <Text style={styles.filterText}>Lu</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setFilter("unread")}>
+            <Text style={styles.filterText}>Non Lu</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setFilter("favorites")}>
+            <Text style={styles.filterText}>Favoris</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.sortOptions}>
+          <Text style={styles.sortText}>Trier par:</Text>
+          <TouchableOpacity onPress={() => setSortCriteria("title")}>
+            <Text style={styles.sortOption}>Titre</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setSortCriteria("author")}>
+            <Text style={styles.sortOption}>Auteur</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setSortCriteria("theme")}>
+            <Text style={styles.sortOption}>Thème</Text>
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity
           style={[styles.cardButton, styles.addButton]}
           onPress={() => router.push("/src/screens/AddEditBookScreen")}
@@ -130,17 +196,13 @@ const BookListScreen = () => {
           <Text style={styles.cardButtonDeleteText}>Ajouter un livre</Text>
         </TouchableOpacity>
 
-        {books.map((item) => (
+        {filteredBooks.map((item) => (
           <View style={styles.card} key={item.id}>
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardAuthor}>Auteur: {item.author}</Text>
             <Text style={styles.cardDetails}>Éditeur: {item.editor}</Text>
-            <Text style={styles.cardDetails}>
-              Année de publication: {item.year}
-            </Text>
-            <Text style={styles.cardDetails}>
-              Lu: {item.read ? "Oui" : "Non"}
-            </Text>
+            <Text style={styles.cardDetails}>Année de publication: {item.year}</Text>
+            <Text style={styles.cardDetails}>Lu: {item.read ? "Oui" : "Non"}</Text>
 
             <View style={styles.favoriteContainer}>
               <Text style={styles.favoriteText}>Favoris:</Text>
@@ -156,18 +218,14 @@ const BookListScreen = () => {
               <Text style={styles.ratingText}>Évaluez ce livre :</Text>
               <StarRating
                 rating={item.rating}
-                onRatingChange={(newRating) =>
-                  handleRatingChange(item.id, newRating)
-                }
+                onRatingChange={(newRating) => handleRatingChange(item.id, newRating)}
               />
             </View>
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.cardButton}
-                onPress={() =>
-                  router.push(`/src/screens/BookDetailScreen?id=${item.id}`)
-                }
+                onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)}
               >
                 <Text style={styles.cardButtonText}>Détails</Text>
               </TouchableOpacity>
@@ -204,6 +262,35 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 15,
+  },
+  filters: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 15,
+  },
+  filterText: {
+    fontSize: 16,
+    color: "#007AFF",
+  },
+  sortOptions: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 20,
+  },
+  sortText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  sortOption: {
+    fontSize: 16,
+    color: "#007AFF",
   },
   card: {
     backgroundColor: "#fff",
@@ -244,11 +331,11 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   addButton: {
-  backgroundColor: "#30d438ff",
-  width: "20%",
-  alignSelf: "flex-end",
-  marginBottom: 10,
-},
+    backgroundColor: "#30d438ff",
+    width: "20%",
+    alignSelf: "flex-end",
+    marginBottom: 10,
+  },
   cardButton: {
     backgroundColor: "#003366",
     paddingVertical: 10,

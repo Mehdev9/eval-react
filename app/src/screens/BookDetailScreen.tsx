@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#f7f7f7',
+    alignItems: 'center',
   },
   loadingText: {
     fontSize: 18,
@@ -69,6 +70,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
+    width: '50%',
+    alignItems: 'center',
   },
   cardTitle: {
     fontSize: 24,

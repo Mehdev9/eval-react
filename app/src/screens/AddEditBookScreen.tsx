@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#f7f7f7',
+    alignItems: 'center',
   },
   formCard: {
     backgroundColor: '#fff',
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     marginBottom: 20,
+    width: '50%',
   },
   formTitle: {
     fontSize: 24,
@@ -113,7 +115,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
+    alignSelf: 'center',
     marginTop: 20,
+    width: '20%',
   },
   saveButtonText: {
     color: '#fff',
