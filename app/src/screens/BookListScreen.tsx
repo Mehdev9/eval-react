@@ -1,8 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Alert, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { getBooks, deleteBook, updateBookStatus, updateBookFavorite } from '../services/BookService';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  getBooks,
+  deleteBook,
+  updateBookStatus,
+  updateBookFavorite,
+  updateBookRating,
+} from "../services/BookService";
+import { useRouter } from "expo-router";
+
+const StarRating = ({
+  rating,
+  onRatingChange,
+}: {
+  rating: number;
+  onRatingChange: (newRating: number) => void;
+}) => {
+  const handlePress = (newRating: number) => {
+    onRatingChange(newRating); // Appelle la fonction de mise à jour de la note
+  };
+
+  return (
+    <View style={styles.starContainer}>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <TouchableOpacity key={star} onPress={() => handlePress(star)}>
+          <Ionicons
+            name={star <= rating ? "star" : "star-outline"}
+            size={30}
+            color="gold"
+          />
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+};
 
 const BookListScreen = () => {
   const [books, setBooks] = useState<any[]>([]);
@@ -16,7 +55,7 @@ const BookListScreen = () => {
       setBooks(booksData);
     } catch (err) {
       console.error(err);
-      setError('Erreur lors de la récupération des livres');
+      setError("Erreur lors de la récupération des livres");
     } finally {
       setLoading(false);
     }
@@ -30,29 +69,44 @@ const BookListScreen = () => {
     try {
       await deleteBook(id);
       setBooks(books.filter((book) => book.id !== id));
-
-      Alert.alert('Succès', 'Le livre a été supprimé avec succès');
+      Alert.alert("Succès", "Le livre a été supprimé avec succès");
     } catch {
-      setError('Erreur lors de la suppression du livre');
-      Alert.alert('Erreur', 'Échec de la suppression du livre');
+      setError("Erreur lors de la suppression du livre");
+      Alert.alert("Erreur", "Échec de la suppression du livre");
     }
   };
 
   const handleToggleStatus = async (book: any) => {
     try {
-      const updatedBook = await updateBookStatus(book.id, { ...book, read: !book.read });
-      setBooks(books.map(b => (b.id === book.id ? updatedBook : b)));
+      const updatedBook = await updateBookStatus(book.id, {
+        ...book,
+        read: !book.read,
+      });
+      setBooks(books.map((b) => (b.id === book.id ? updatedBook : b)));
     } catch (error) {
-      setError('Erreur lors de la mise à jour du statut');
+      setError("Erreur lors de la mise à jour du statut");
     }
   };
 
   const toggleFavorite = async (book: any) => {
     try {
       const updatedBook = await updateBookFavorite(book.id, !book.favorite);
-      setBooks(books.map(b => (b.id === book.id ? updatedBook : b)));
+      setBooks(books.map((b) => (b.id === book.id ? updatedBook : b)));
     } catch (error) {
-      console.error('Erreur:', error);
+      console.error("Erreur:", error);
+    }
+  };
+
+  const handleRatingChange = async (id: string, newRating: number) => {
+    try {
+      await updateBookRating(id, newRating);
+      setBooks(
+        books.map((book) =>
+          book.id === id ? { ...book, rating: newRating } : book
+        )
+      );
+    } catch (error) {
+      setError("Erreur lors de la mise à jour de la note");
     }
   };
 
@@ -68,19 +122,25 @@ const BookListScreen = () => {
     <ScrollView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Text style={styles.title}>Liste des Livres</Text>
+
         <TouchableOpacity
-          style={styles.addButton}
+          style={[styles.cardButton, styles.addButton]}
           onPress={() => router.push("/src/screens/AddEditBookScreen")}
         >
-          <Text style={styles.addButtonText}>Ajouter un livre</Text>
+          <Text style={styles.cardButtonDeleteText}>Ajouter un livre</Text>
         </TouchableOpacity>
+
         {books.map((item) => (
           <View style={styles.card} key={item.id}>
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardAuthor}>Auteur: {item.author}</Text>
             <Text style={styles.cardDetails}>Éditeur: {item.editor}</Text>
-            <Text style={styles.cardDetails}>Année de publication: {item.year}</Text>
-            <Text style={styles.cardDetails}>Lu: {item.read ? 'Oui' : 'Non'}</Text>
+            <Text style={styles.cardDetails}>
+              Année de publication: {item.year}
+            </Text>
+            <Text style={styles.cardDetails}>
+              Lu: {item.read ? "Oui" : "Non"}
+            </Text>
 
             <View style={styles.favoriteContainer}>
               <Text style={styles.favoriteText}>Favoris:</Text>
@@ -92,16 +152,37 @@ const BookListScreen = () => {
               />
             </View>
 
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>Évaluez ce livre :</Text>
+              <StarRating
+                rating={item.rating}
+                onRatingChange={(newRating) =>
+                  handleRatingChange(item.id, newRating)
+                }
+              />
+            </View>
+
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.cardButton} onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)}>
+              <TouchableOpacity
+                style={styles.cardButton}
+                onPress={() =>
+                  router.push(`/src/screens/BookDetailScreen?id=${item.id}`)
+                }
+              >
                 <Text style={styles.cardButtonText}>Détails</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.cardButton} onPress={() => handleToggleStatus(item)}>
+              <TouchableOpacity
+                style={styles.cardButton}
+                onPress={() => handleToggleStatus(item)}
+              >
                 <Text style={styles.cardButtonText}>
                   {item.read ? "Marquer comme non lu" : "Marquer comme lu"}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.cardButton, styles.deleteButton]} onPress={() => handleDelete(item.id)}>
+              <TouchableOpacity
+                style={[styles.cardButton, styles.deleteButton]}
+                onPress={() => handleDelete(item.id)}
+              >
                 <Text style={styles.cardButtonDeleteText}>Supprimer</Text>
               </TouchableOpacity>
             </View>
@@ -116,91 +197,92 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: "#f7f7f7",
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
     elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
   },
   cardTitle: {
     fontSize: 22,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 8,
   },
   cardAuthor: {
     fontSize: 16,
     marginBottom: 4,
-    color: '#555',
+    color: "#555",
   },
   cardDetails: {
     fontSize: 14,
     marginBottom: 4,
-    color: '#777',
+    color: "#777",
   },
   favoriteContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
   favoriteText: {
     marginRight: 10,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: 15,
     gap: 10,
   },
+  addButton: {
+  backgroundColor: "#30d438ff",
+  width: "20%",
+  alignSelf: "flex-end",
+  marginBottom: 10,
+},
   cardButton: {
-    backgroundColor: '#003366',
+    backgroundColor: "#003366",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
     marginHorizontal: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   cardButtonText: {
-    color: '#FFD700',
+    color: "#FFD700",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   deleteButton: {
-    backgroundColor: '#E53935',
+    backgroundColor: "#E53935",
   },
   cardButtonDeleteText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-  addButton: {
-    marginTop: 30,
-    marginBottom: 20,
-    backgroundColor: '#30d438ff',
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    width: '30%',
-    alignSelf: 'flex-end',
+  starContainer: {
+    flexDirection: "row",
+    marginTop: 10,
   },
-  addButtonText: {
-    color: '#fff',
+  ratingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  ratingText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    marginRight: 10,
+    fontWeight: "500",
   },
 });
 

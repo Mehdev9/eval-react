@@ -1,4 +1,4 @@
-const API_URL = 'http://10.105.1.210:3000';
+const API_URL = 'http://192.168.1.177:3000';
 
 export const getBooks = async () => {
   try {
@@ -100,6 +100,23 @@ export const updateBookFavorite = async (id: string, favorite: boolean) => {
     });
     if (!response.ok) {
       throw new Error('Erreur lors de la mise à jour du favori');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Erreur:', error);
+    throw error;
+  }
+};
+
+export const updateBookRating = async (id: string, rating: number) => {
+  try {
+    const response = await fetch(`${API_URL}/books/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating }),
+    });
+    if (!response.ok) {
+      throw new Error('Erreur lors de la mise à jour de la note');
     }
     return await response.json();
   } catch (error) {
