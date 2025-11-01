@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#30d438ff",
     width: "20%",
     alignSelf: "flex-end",
-    marginBottom: 10,
+    marginBottom: 20,
   },
   cardButton: {
     backgroundColor: "#003366",
@@ -386,6 +386,11 @@ const styles = StyleSheet.create({
   borderRadius: 10,
   marginBottom: 10,
   resizeMode: 'contain',
+  elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
 },
   deleteButton: {
     backgroundColor: "#E53935",
