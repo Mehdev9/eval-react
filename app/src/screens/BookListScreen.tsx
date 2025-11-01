@@ -72,9 +72,10 @@ const BookListScreen = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = books.filter((book) =>
-      book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchQuery.toLowerCase())
+    let filtered = books.filter(
+      (book) =>
+        book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     if (filter === "read") {
@@ -162,6 +163,8 @@ const BookListScreen = () => {
         />
 
         <View style={styles.filters}>
+          <Text style={styles.sortText}>Filtrer par:</Text>
+
           <TouchableOpacity onPress={() => setFilter("all")}>
             <Text style={styles.filterText}>Tous</Text>
           </TouchableOpacity>
@@ -201,8 +204,12 @@ const BookListScreen = () => {
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardAuthor}>Auteur: {item.author}</Text>
             <Text style={styles.cardDetails}>Éditeur: {item.editor}</Text>
-            <Text style={styles.cardDetails}>Année de publication: {item.year}</Text>
-            <Text style={styles.cardDetails}>Lu: {item.read ? "Oui" : "Non"}</Text>
+            <Text style={styles.cardDetails}>
+              Année de publication: {item.year}
+            </Text>
+            <Text style={styles.cardDetails}>
+              Lu: {item.read ? "Oui" : "Non"}
+            </Text>
 
             <View style={styles.favoriteContainer}>
               <Text style={styles.favoriteText}>Favoris:</Text>
@@ -218,14 +225,18 @@ const BookListScreen = () => {
               <Text style={styles.ratingText}>Évaluez ce livre :</Text>
               <StarRating
                 rating={item.rating}
-                onRatingChange={(newRating) => handleRatingChange(item.id, newRating)}
+                onRatingChange={(newRating) =>
+                  handleRatingChange(item.id, newRating)
+                }
               />
             </View>
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.cardButton}
-                onPress={() => router.push(`/src/screens/BookDetailScreen?id=${item.id}`)}
+                onPress={() =>
+                  router.push(`/src/screens/BookDetailScreen?id=${item.id}`)
+                }
               >
                 <Text style={styles.cardButtonText}>Détails</Text>
               </TouchableOpacity>
@@ -269,11 +280,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 15,
+    width: "40%",
+    alignSelf: "center",
   },
   filters: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
     marginBottom: 15,
+    gap: 15,
   },
   filterText: {
     fontSize: 16,
@@ -281,8 +295,9 @@ const styles = StyleSheet.create({
   },
   sortOptions: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
     marginBottom: 20,
+    gap: 15,
   },
   sortText: {
     fontSize: 16,

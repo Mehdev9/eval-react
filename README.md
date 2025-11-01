@@ -14,6 +14,10 @@
 
 // ajout de la note dans details
 
+// ajout du systeme de notation
+
+// ajout des filtres, tri et recherche
+
 
 
 
