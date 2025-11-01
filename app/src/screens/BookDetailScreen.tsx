@@ -34,7 +34,7 @@ const BookDetailScreen = () => {
         <Text style={styles.cardDetail}>Éditeur : {book.editor}</Text>
         <Text style={styles.cardDetail}>Année de publication : {book.year}</Text>
         <Text style={styles.cardDetail}>Statut : {book.lu ? 'Lu' : 'Non lu'}</Text>
-        <Text style={styles.cardDetail}>Note des lecteurs : {book.rating}/5</Text>
+        <Text style={styles.cardDetail}>Note : {book.rating}/5</Text>
       </View>
 
       <TouchableOpacity
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 20,
+    marginBottom: 20,
     width: '30%',
     alignSelf: 'center',
   },

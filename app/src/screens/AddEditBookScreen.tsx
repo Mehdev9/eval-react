@@ -150,10 +150,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFA500',
     paddingVertical: 12,
     borderRadius: 10,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     alignSelf: 'flex-start',
     marginTop: 20,
-    width: '50%',
+    width: '20%',
   },
   imageButtonText: {
     color: '#fff',

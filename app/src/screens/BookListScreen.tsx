@@ -50,7 +50,7 @@ const BookListScreen = () => {
   const [filteredBooks, setFilteredBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");  
   const [filter, setFilter] = useState<string>("all");
   const [sortCriteria, setSortCriteria] = useState<string>("title");
   const router = useRouter();
@@ -92,7 +92,7 @@ const BookListScreen = () => {
     } else if (sortCriteria === "author") {
       filtered.sort((a, b) => a.author.localeCompare(b.author));
     } else if (sortCriteria === "theme") {
-      filtered.sort((a, b) => a.editor.localeCompare(b.editor)); // Assuming "theme" is represented by the 'editor' field
+      filtered.sort((a, b) => a.editor.localeCompare(b.editor));
     }
 
     setFilteredBooks(filtered);
@@ -202,63 +202,63 @@ const BookListScreen = () => {
 
         {filteredBooks.map((item) => (
           <View style={styles.card} key={item.id}>
-            <Text style={styles.cardTitle}>{item.name}</Text>
-            <Text style={styles.cardAuthor}>Auteur: {item.author}</Text>
-            <Text style={styles.cardDetails}>Éditeur: {item.editor}</Text>
-            <Text style={styles.cardDetails}>
-              Année de publication: {item.year}
-            </Text>
-            <Text style={styles.cardDetails}>
-              Lu: {item.read ? "Oui" : "Non"}
-            </Text>
+            <View style={styles.cardContent}>
+              <View style={styles.textContent}>
+                <Text style={styles.cardTitle}>{item.name}</Text>
+                <Text style={styles.cardAuthor}>Auteur: {item.author}</Text>
+                <Text style={styles.cardDetails}>Éditeur: {item.editor}</Text>
+                <Text style={styles.cardDetails}>Année de publication: {item.year}</Text>
+                <Text style={styles.cardDetails}>Lu: {item.read ? "Oui" : "Non"}</Text>
 
-            <View style={styles.favoriteContainer}>
-              <Text style={styles.favoriteText}>Favoris:</Text>
-              <Ionicons
-                name={item.favorite ? "heart" : "heart-outline"}
-                size={24}
-                color="red"
-                onPress={() => toggleFavorite(item)}
-              />
-            </View>
+                <View style={styles.favoriteContainer}>
+                  <Text style={styles.favoriteText}>Favoris:</Text>
+                  <Ionicons
+                    name={item.favorite ? "heart" : "heart-outline"}
+                    size={24}
+                    color="red"
+                    onPress={() => toggleFavorite(item)}
+                  />
+                </View>
 
-            <View style={styles.ratingContainer}>
-              <Text style={styles.ratingText}>Évaluez ce livre :</Text>
-              <StarRating
-                rating={item.rating}
-                onRatingChange={(newRating) =>
-                  handleRatingChange(item.id, newRating)
-                }
-                />
-            </View>
+                <View style={styles.ratingContainer}>
+                  <Text style={styles.ratingText}>Évaluez ce livre :</Text>
+                  <StarRating
+                    rating={item.rating}
+                    onRatingChange={(newRating) =>
+                      handleRatingChange(item.id, newRating)
+                    }
+                  />
+                </View>
 
-                {item.cover && (
-                  <Image source={{ uri: item.cover }} style={styles.cardImage} />
-                )}
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={styles.cardButton}
+                    onPress={() =>
+                      router.push(`/src/screens/BookDetailScreen?id=${item.id}`)
+                    }
+                  >
+                    <Text style={styles.cardButtonText}>Détails</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.cardButton}
+                    onPress={() => handleToggleStatus(item)}
+                  >
+                    <Text style={styles.cardButtonText}>
+                      {item.read ? "Marquer comme non lu" : "Marquer comme lu"}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.cardButton, styles.deleteButton]}
+                    onPress={() => handleDelete(item.id)}
+                  >
+                    <Text style={styles.cardButtonDeleteText}>Supprimer</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.cardButton}
-                onPress={() =>
-                  router.push(`/src/screens/BookDetailScreen?id=${item.id}`)
-                }
-              >
-                <Text style={styles.cardButtonText}>Détails</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.cardButton}
-                onPress={() => handleToggleStatus(item)}
-              >
-                <Text style={styles.cardButtonText}>
-                  {item.read ? "Marquer comme non lu" : "Marquer comme lu"}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.cardButton, styles.deleteButton]}
-                onPress={() => handleDelete(item.id)}
-              >
-                <Text style={styles.cardButtonDeleteText}>Supprimer</Text>
-              </TouchableOpacity>
+              {item.cover && (
+                <Image source={{ uri: item.cover }} style={styles.cardImage} />
+              )}
             </View>
           </View>
         ))}
@@ -272,6 +272,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#f7f7f7",
+    width: "60%",
+    alignSelf: "center",
   },
   title: {
     fontSize: 28,
@@ -318,6 +320,15 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     elevation: 3,
+    flexDirection: "row",
+  },
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  textContent: {
+    flex: 1,
+    paddingRight: 15,
   },
   cardTitle: {
     fontSize: 22,
@@ -370,8 +381,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
    cardImage: {
-  width: 100,
-  height: 150,
+  width: 150,
+  height: 225,
   borderRadius: 10,
   marginBottom: 10,
   resizeMode: 'contain',
